@@ -32,7 +32,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{route('admin.admin_users.index')}}" class="nav-link">
               <i class="nav-icon fas fa-users"> </i>
                 Admins
             </a>
@@ -53,6 +53,9 @@
             <a href="{{route('admin.posts.index')}}" class="nav-link">
               <i class="nav-icon fas fa-users"> </i>
                 posts
+            <a href="{{route('admin.settings.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-users"> </i>
+                Settings
             </a>
           </li>
         </ul>
