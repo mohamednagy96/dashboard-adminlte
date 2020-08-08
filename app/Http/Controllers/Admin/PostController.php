@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users= User::paginate(10);
-        return view('admin.dashboardpages.users.index',compact('users'));
+        $posts= Post::paginate(10);
+        return view('admin.dashboardpages.posts.index',compact('posts'));
     }
 
     /**
@@ -26,7 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.dashboardpages.users.create');
+        //
     }
 
     /**
@@ -35,12 +35,9 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,User $user)
+    public function store(Request $request)
     {
-        $inputs=$request->all();
-        $inputs['password']=bcrypt($inputs['password']);
-        $user=User::create($inputs);
-        return redirect()->route('admin.users.index')->with(['success'=>'save data']);
+        //
     }
 
     /**
@@ -60,10 +57,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($id)
     {
-        return view('admin.dashboardpages.users.edit',compact('user'));
-        
+        //
     }
 
     /**
@@ -73,16 +69,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
-        $inputs=$request->all();
-        if($inputs['password']){
-            $inputs['password']=bcrypt($inputs['password']);
-        }else{
-            $inputs['password']=$user->password;
-        }
-        $user->update($inputs);
-        return redirect()->route('admin.users.index')->with(['success'=>'Update Data']);
+        //
     }
 
     /**
@@ -91,10 +80,8 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        $user->delete();
-        return redirect()->route('admin.users.index')->with(['success'=>'Delete Data']);
-        // return redirect()->route('admin.users.index')->with(['success'=>'save data']);
+        //
     }
 }

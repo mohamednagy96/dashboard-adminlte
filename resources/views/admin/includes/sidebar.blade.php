@@ -43,6 +43,18 @@
                 Users
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{route('admin.pages.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-users"> </i>
+                pages
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('admin.posts.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-users"> </i>
+                posts
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
