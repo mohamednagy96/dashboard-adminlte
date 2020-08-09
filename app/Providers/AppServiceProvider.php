@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // $settings=Setting::pluck('value','key')->toArray();
+        $settings=Setting::pluck('value','key')->toArray();
            $settings = Setting::all('key', 'value')
            ->keyBy('key')
            ->transform(function ($setting) {

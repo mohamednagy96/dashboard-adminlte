@@ -8,8 +8,9 @@
         <tr>
             <th>ID</th>
             <th>{{ __('title') }}</th>
-            <th>{{ __('short brief') }}</th>
-            <th>{{ __('readmore') }}</th>
+            <th>{{ __('fulltext') }}</th>
+            <th>{{ __('date') }}</th>
+           
             <th>{{ __('image') }}</th>
             <th>{{ __('Created at') }}</th>
             <th>{{ __('Action') }}</th>
@@ -22,9 +23,11 @@
             <tr>
                 <td>{{ $page->id }}</td>
                 <td>{{ $page->title }}</td>
-                <td>{{ $page->shortbrief }}</td>
-                <td>{{ $page->readmore}}</td>
-                <td>{{ $page->image }}</td>
+                <td>{{ $page->fulltext }}</td>
+                <td>{{ $page->date }}</td>
+                <td>
+                <img src="{{ $page->image ? 'http://127.0.0.1:8000/images/'.$page->image : 'http://127.0.0.1:8000/storage/images/defaultimage.jpg'}}" alt="" width="100px">
+            </td>
                 <td>{{$page->created_at ?  $page->created_at->diffForHumans() : null}}</td>
                 <td>
                     <a href="{{ route('admin.pages.edit', $page->id) }}" class="btn btn-primary btn-xs">

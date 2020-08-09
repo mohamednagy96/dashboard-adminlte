@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\classes\General;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.dashboardpages.pages.create');
     }
 
     /**
@@ -37,7 +38,15 @@ class PageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $inputs=$request->all();
+        if ($request->has('image')) {
+            
+            $fileName = General::uploadImage('images',$request->file('image'));
+        }
+        $inputs['image'] = $fileName ;
+        
+        $page=Page::create($inputs);
+        return redirect()->route('admin.pages.index')->with(['success'=>'save data']);
     }
 
     /**
@@ -57,9 +66,9 @@ class PageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Page $page)
     {
-        //
+        return view('admin.dashboardpages.pages.edit',compact('page'));
     }
 
     /**
@@ -69,9 +78,17 @@ class PageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Page $page)
     {
-        //
+        
+        $inputs=$request->all();
+        if ($request->has('image')) {
+            
+            $fileName = General::uploadImage('images',$request->file('image'));
+        }
+        $inputs['image'] = $fileName ;
+        $page->update($inputs);
+        return redirect()->route('admin.pages.index')->with(['success'=>'Update Data']);
     }
 
     /**
@@ -80,8 +97,9 @@ class PageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Page $page)
     {
-        //
+        $page->delete();
+        return redirect()->route('admin.pages.index')->with(['success'=>'Delete Data']);
     }
 }

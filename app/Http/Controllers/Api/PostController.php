@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\classes\General;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PostsResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -16,8 +17,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts= Post::paginate(10);
-        return view('admin.dashboardpages.posts.index',compact('posts'));
+        $posts = Post::all();
+        return PostsResource::collection($posts);
     }
 
     /**
@@ -27,7 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.dashboardpages.posts.create');
+        //
     }
 
     /**
@@ -38,16 +39,15 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $inputs=$request->all();
+        $store = $request->all();
         if ($request->has('image')) {
             
             $fileName = General::uploadImage('images',$request->file('image'));
+            $store['image'] = $fileName ;
         }
-        $inputs['image'] = $fileName ;
-        
-        $post=Post::create($inputs);
-        
-        return redirect()->route('admin.posts.index')->with(['success'=>'save data']);
+       
+        $postCreate = Post::create($store);
+        return $this->successResponse();
     }
 
     /**
@@ -56,9 +56,11 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+    
+       return PostsResource::collection($post);
+
     }
 
     /**
@@ -67,9 +69,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit($id)
     {
-        return view('admin.dashboardpages.posts.edit',compact('post'));
+        //
     }
 
     /**
@@ -81,14 +83,16 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $inputs=$request->all();
+       
+        $update = $request->all();
         if ($request->has('image')) {
             
             $fileName = General::uploadImage('images',$request->file('image'));
+            $store['image'] = $fileName ;
         }
-        $inputs['image'] = $fileName ;
-        $post->update($inputs);
-        return redirect()->route('admin.posts.index')->with(['success'=>'Update Data']);
+   
+        $post->update($update);    
+        return $this->successResponse();
     }
 
     /**
@@ -99,7 +103,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
-        return redirect()->route('admin.posts.index')->with(['success'=>'Delete Data']);
+        $post->delete();   
+        return $this->successResponse();
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api;
 
-use App\classes\General;
 use App\Http\Controllers\Controller;
-use App\Models\Post;
+use App\Http\Resources\PagesResource;
+use App\Models\Page;
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class PageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts= Post::paginate(10);
-        return view('admin.dashboardpages.posts.index',compact('posts'));
+        $pages = Page::all();
+        return PagesResource::collection($pages);
     }
 
     /**
@@ -27,7 +27,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.dashboardpages.posts.create');
+        //
     }
 
     /**
@@ -38,16 +38,15 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $inputs=$request->all();
+        $store = $request->all();
         if ($request->has('image')) {
             
             $fileName = General::uploadImage('images',$request->file('image'));
+            $store['image'] = $fileName ;
         }
-        $inputs['image'] = $fileName ;
-        
-        $post=Post::create($inputs);
-        
-        return redirect()->route('admin.posts.index')->with(['success'=>'save data']);
+      
+        $pageCreate = Page::create($store);
+        return $this->successResponse();
     }
 
     /**
@@ -56,9 +55,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Page $page)
     {
-        //
+        return PagesResource::collection($page);
     }
 
     /**
@@ -67,9 +66,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit($id)
     {
-        return view('admin.dashboardpages.posts.edit',compact('post'));
+        //
     }
 
     /**
@@ -79,16 +78,19 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Page $page)
     {
-        $inputs=$request->all();
+         
+      
+        $update = $request->all();
         if ($request->has('image')) {
             
             $fileName = General::uploadImage('images',$request->file('image'));
+            $store['image'] = $fileName ;
         }
-        $inputs['image'] = $fileName ;
-        $post->update($inputs);
-        return redirect()->route('admin.posts.index')->with(['success'=>'Update Data']);
+        
+        $page->update($update);   
+        return $this->successResponse();
     }
 
     /**
@@ -97,9 +99,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy(Page $page)
     {
-        $post->delete();
-        return redirect()->route('admin.posts.index')->with(['success'=>'Delete Data']);
+        $page->delete();   
+        return $this->successResponse();
     }
 }
